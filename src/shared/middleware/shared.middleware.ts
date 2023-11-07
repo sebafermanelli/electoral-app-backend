@@ -11,7 +11,7 @@ export class SharedMiddleware {
 		return passport.authenticate(strategy, { session: false });
 	}
 
-	async checkAdminRole(req: Request, res: Response, next: NextFunction) {
+	checkAdminRole(req: Request, res: Response, next: NextFunction) {
 		const user = req.user as UserEntity;
 		if (user.role !== RoleType.ADMIN) {
 			return this.httpResponse.Unauthorized(res, 'No tienes permisos');

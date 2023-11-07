@@ -5,9 +5,17 @@ import { ElectionEntity } from './election.entity';
 
 @Entity({ name: 'votes' })
 export class VoteEntity extends SharedEntity {
-	@ManyToOne(() => VoterEntity, (voter) => voter.votes, { nullable: false })
+	@ManyToOne(() => VoterEntity, (voter) => voter.votes, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	voter!: VoterEntity;
 
-	@ManyToOne(() => ElectionEntity, (election) => election.votes, { nullable: false })
+	@ManyToOne(() => ElectionEntity, (election) => election.votes, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	election!: ElectionEntity;
 }

@@ -19,21 +19,21 @@ export class VoteRouter extends SharedRouter<VoteController, VoteMiddleware> {
 		this.router.post(
 			'/vote',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.validateVote(req, res, next)],
+			(req, res, next) => this.middleware.validateVote(req, res, next),
 			(req, res) => this.controller.createVote(req, res)
 		);
 
 		this.router.put(
 			'/vote/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateVote(req, res)
 		);
 
 		this.router.delete(
 			'/vote/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteVote(req, res)
 		);
 	}

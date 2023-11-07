@@ -7,15 +7,31 @@ import { DelegationEntity } from '../../delegation/entities/delegation.entity';
 
 @Entity({ name: 'candidates' })
 export class CandidateEntity extends SharedEntity {
-	@ManyToOne(() => VoterEntity, (voter) => voter.candidates, { nullable: false })
+	@ManyToOne(() => VoterEntity, (voter) => voter.candidates, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	voter!: VoterEntity;
 
-	@ManyToOne(() => RoleEntity, (role) => role.candidates, { nullable: false })
+	@ManyToOne(() => RoleEntity, (role) => role.candidates, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	role!: RoleEntity;
 
-	@ManyToOne(() => ListEntity, (list) => list.candidates, { nullable: false })
+	@ManyToOne(() => ListEntity, (list) => list.candidates, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	list!: ListEntity;
 
-	@ManyToOne(() => DelegationEntity, (delegation) => delegation.candidates, { nullable: true })
+	@ManyToOne(() => DelegationEntity, (delegation) => delegation.candidates, {
+		nullable: true,
+		onDelete: 'SET NULL',
+		onUpdate: 'SET NULL',
+	})
 	delegation?: DelegationEntity;
 }

@@ -19,24 +19,22 @@ export class ListRouter extends SharedRouter<ListController, ListMiddleware> {
 		this.router.post(
 			'/list',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.validateList(req, res, next),
-			],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
+			(req, res, next) => this.middleware.validateList(req, res, next),
 			(req, res) => this.controller.createList(req, res)
 		);
 
 		this.router.put(
 			'/list/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateList(req, res)
 		);
 
 		this.router.delete(
 			'/list/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteList(req, res)
 		);
 	}

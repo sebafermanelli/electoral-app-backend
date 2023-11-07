@@ -5,10 +5,16 @@ import { CandidateEntity } from '../../candidate/entities/candidate.entity';
 
 @Entity({ name: 'delegations' })
 export class DelegationEntity extends SharedEntity {
-	@OneToOne(() => ElectionEntity, (election) => election.delegation, { nullable: false })
+	@OneToOne(() => ElectionEntity, (election) => election.delegation, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	@JoinColumn()
 	election!: ElectionEntity;
 
-	@OneToMany(() => CandidateEntity, (candidate) => candidate.delegation)
+	@OneToMany(() => CandidateEntity, (candidate) => candidate.delegation, {
+		cascade: ['insert', 'update', 'remove'],
+	})
 	candidates!: CandidateEntity[];
 }

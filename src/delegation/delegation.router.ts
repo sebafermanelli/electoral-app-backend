@@ -19,24 +19,22 @@ export class DelegationRouter extends SharedRouter<DelegationController, Delegat
 		this.router.post(
 			'/delegation',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.validateDelegation(req, res, next),
-			],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
+			(req, res, next) => this.middleware.validateDelegation(req, res, next),
 			(req, res) => this.controller.createDelegation(req, res)
 		);
 
 		this.router.put(
 			'/delegation/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateDelegation(req, res)
 		);
 
 		this.router.delete(
 			'/delegation/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteDelegation(req, res)
 		);
 	}

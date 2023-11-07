@@ -14,9 +14,15 @@ export class RoleEntity extends SharedEntity {
 	@Column({ default: false })
 	dhondt?: boolean;
 
-	@ManyToOne(() => ElectionEntity, (election) => election.roles, { nullable: false })
+	@ManyToOne(() => ElectionEntity, (election) => election.roles, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	election!: ElectionEntity;
 
-	@OneToMany(() => CandidateEntity, (candidate) => candidate.role)
+	@OneToMany(() => CandidateEntity, (candidate) => candidate.role, {
+		cascade: ['insert', 'update', 'remove'],
+	})
 	candidates!: CandidateEntity[];
 }

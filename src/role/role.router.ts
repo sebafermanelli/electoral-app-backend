@@ -19,24 +19,22 @@ export class RoleRouter extends SharedRouter<RoleController, RoleMiddleware> {
 		this.router.post(
 			'/role',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.validateRole(req, res, next),
-			],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
+			(req, res, next) => this.middleware.validateRole(req, res, next),
 			(req, res) => this.controller.createRole(req, res)
 		);
 
 		this.router.put(
 			'/role/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateRole(req, res)
 		);
 
 		this.router.delete(
 			'/role/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteRole(req, res)
 		);
 	}

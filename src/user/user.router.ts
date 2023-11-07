@@ -18,25 +18,21 @@ export class UserRouter extends SharedRouter<UserController, UserMiddleware> {
 
 		this.router.post(
 			'/user',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.validateUser(req, res, next),
-			],
+			(req, res, next) => this.middleware.validateUser(req, res, next),
 			(req, res) => this.controller.createUser(req, res)
 		);
 
 		this.router.put(
 			'/user/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateUser(req, res)
 		);
 
 		this.router.delete(
 			'/user/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteUser(req, res)
 		);
 

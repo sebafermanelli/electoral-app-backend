@@ -19,31 +19,29 @@ export class ElectionRouter extends SharedRouter<ElectionController, ElectionMid
 		this.router.post(
 			'/election',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.validateElection(req, res, next),
-			],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
+			(req, res, next) => this.middleware.validateElection(req, res, next),
 			(req, res) => this.controller.createElection(req, res)
 		);
 
 		this.router.put(
 			'/election/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateElection(req, res)
 		);
 
 		this.router.delete(
 			'/election/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteElection(req, res)
 		);
 
 		this.router.put(
 			'/election/:id/results',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.genResults(req, res)
 		);
 	}

@@ -3,6 +3,8 @@ import { SharedService } from '../../shared/service/shared.service';
 import { ElectionDTO } from '../dtos/election.dto';
 import { ElectionEntity } from '../entities/election.entity';
 import { CandidateService } from '../../candidate/services/candidate.service';
+import { CandidateDTO } from '../../candidate/dtos/candidate.dto';
+import { DateTime, Settings } from 'luxon';
 
 export class ElectionService extends SharedService<ElectionEntity> {
 	constructor(private readonly candidateService: CandidateService = new CandidateService()) {
@@ -14,10 +16,18 @@ export class ElectionService extends SharedService<ElectionEntity> {
 			.createQueryBuilder('election')
 			.leftJoinAndSelect('election.delegation', 'delegation')
 			.leftJoinAndSelect('delegation.candidates', 'candidatesDelegation')
+			.leftJoinAndSelect('candidatesDelegation.role', 'roleDelegation')
+			.leftJoinAndSelect('candidatesDelegation.list', 'listDelegation')
+			.leftJoinAndSelect('candidatesDelegation.voter', 'voterDelegation')
+			.leftJoinAndSelect('voterDelegation.user', 'userDelegation')
 			.leftJoinAndSelect('election.roles', 'roles')
 			.leftJoinAndSelect('roles.candidates', 'candidatesRoles')
+			.leftJoinAndSelect('candidatesRoles.voter', 'voterRoles')
+			.leftJoinAndSelect('voterRoles.user', 'userRoles')
 			.leftJoinAndSelect('election.lists', 'lists')
 			.leftJoinAndSelect('lists.candidates', 'candidatesLists')
+			.leftJoinAndSelect('candidatesLists.voter', 'voterLists')
+			.leftJoinAndSelect('voterLists.user', 'userLists')
 			.leftJoinAndSelect('election.votes', 'votes')
 			.orderBy('roles.order', 'ASC')
 			.addOrderBy('lists.votes', 'DESC')
@@ -29,10 +39,18 @@ export class ElectionService extends SharedService<ElectionEntity> {
 			.createQueryBuilder('election')
 			.leftJoinAndSelect('election.delegation', 'delegation')
 			.leftJoinAndSelect('delegation.candidates', 'candidatesDelegation')
+			.leftJoinAndSelect('candidatesDelegation.role', 'roleDelegation')
+			.leftJoinAndSelect('candidatesDelegation.list', 'listDelegation')
+			.leftJoinAndSelect('candidatesDelegation.voter', 'voterDelegation')
+			.leftJoinAndSelect('voterDelegation.user', 'userDelegation')
 			.leftJoinAndSelect('election.roles', 'roles')
 			.leftJoinAndSelect('roles.candidates', 'candidatesRoles')
+			.leftJoinAndSelect('candidatesRoles.voter', 'voterRoles')
+			.leftJoinAndSelect('voterRoles.user', 'userRoles')
 			.leftJoinAndSelect('election.lists', 'lists')
 			.leftJoinAndSelect('lists.candidates', 'candidatesLists')
+			.leftJoinAndSelect('candidatesLists.voter', 'voterLists')
+			.leftJoinAndSelect('voterLists.user', 'userLists')
 			.leftJoinAndSelect('election.votes', 'votes')
 			.where({ id })
 			.orderBy('roles.order', 'ASC')
@@ -52,7 +70,7 @@ export class ElectionService extends SharedService<ElectionEntity> {
 		return (await this.execRepository).update(id, infoUpdate);
 	}
 
-	async genResultsElection(id: string, election: ElectionEntity): Promise<UpdateResult> {
+	async genResultsElection(election: ElectionEntity): Promise<UpdateResult> {
 		// Creo un arreglo de las listas con un atributo asignatedPos inicializado en 1 para que si posee algun cargo con rol que deba ser mediante el sistema Dhondt, el mismo vaya incrementandose a medida que se asignan los cargos
 		const lists = election.lists.map((list) => {
 			const newList = { ...list, asignatedPos: 1 };
@@ -66,7 +84,7 @@ export class ElectionService extends SharedService<ElectionEntity> {
 				// Obtengo la lista del candidato ganador a travez de Dhondt
 				const winnerList = lists.reduce((maxList, list) => {
 					const quotient = list.votes / list.asignatedPos;
-					if (quotient > maxQuotient && list.candidates) {
+					if (quotient > maxQuotient && list.candidates.length > 0) {
 						maxQuotient = quotient;
 						return list;
 					} else {
@@ -84,17 +102,20 @@ export class ElectionService extends SharedService<ElectionEntity> {
 				);
 				// Asigno la delegacion al candidato ganador mediante el sistema Dhondt
 				if (candidate) {
-					candidate.delegation = election.delegation;
-					await this.candidateService.updateCandidate(candidate.id, candidate);
+					const updatedCandidate: CandidateDTO = {
+						voter: candidate.voter,
+						role: candidate.role,
+						list: candidate.list,
+						delegation: election.delegation,
+					};
+					await this.candidateService.updateCandidate(candidate.id, updatedCandidate);
 				}
 			}
 			// Si el rol no es mediante el sistema Dhondt se cumple la siguiente logica:
 			else {
-				let maxVotes = -Infinity;
 				// Obtengo la lista del candidato ganador por cantidad de votos a la lista
 				const winnerList = lists.reduce((maxList, list) => {
-					if (list.votes > maxVotes && list.candidates) {
-						maxVotes = list.votes;
+					if (list.votes > maxList.votes && list.candidates.length > 0) {
 						return list;
 					} else {
 						return maxList;
@@ -107,11 +128,21 @@ export class ElectionService extends SharedService<ElectionEntity> {
 				);
 				// Asigno la delegacion al candidato ganador por cantidad de votos a la lista
 				if (candidate) {
-					candidate.delegation = election.delegation;
-					await this.candidateService.updateCandidate(candidate.id, candidate);
+					const updatedCandidate: CandidateDTO = {
+						voter: candidate.voter,
+						role: candidate.role,
+						list: candidate.list,
+						delegation: election.delegation,
+					};
+					await this.candidateService.updateCandidate(candidate.id, updatedCandidate);
 				}
 			}
 		});
-		return (await this.execRepository).update(id, election);
+		const updatedElection: ElectionDTO = {
+			name: election.name,
+			startDate: election.startDate,
+			endDate: DateTime.now().toJSDate(),
+		};
+		return (await this.execRepository).update(election.id, updatedElection);
 	}
 }

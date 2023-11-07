@@ -19,24 +19,22 @@ export class CandidateRouter extends SharedRouter<CandidateController, Candidate
 		this.router.post(
 			'/candidate',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.validateCandidate(req, res, next),
-			],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
+			(req, res, next) => this.middleware.validateCandidate(req, res, next),
 			(req, res) => this.controller.createCandidate(req, res)
 		);
 
 		this.router.put(
 			'/candidate/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateCandidate(req, res)
 		);
 
 		this.router.delete(
 			'/candidate/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteCandidate(req, res)
 		);
 	}

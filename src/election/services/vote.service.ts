@@ -29,8 +29,8 @@ export class VoteService extends SharedService<VoteEntity> {
 	async findVoteByElectionAndVoter(election: string, voter: string): Promise<VoteEntity | null> {
 		return (await this.execRepository)
 			.createQueryBuilder('vote')
-			.leftJoinAndSelect('vote.election', 'election')
-			.leftJoinAndSelect('vote.voter', 'voter')
+			.innerJoinAndSelect('vote.election', 'election')
+			.innerJoinAndSelect('vote.voter', 'voter')
 			.where({ election })
 			.andWhere({ voter })
 			.getOne();

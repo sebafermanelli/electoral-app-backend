@@ -11,9 +11,15 @@ export class ListEntity extends SharedEntity {
 	@Column({ default: 0 })
 	votes!: number;
 
-	@ManyToOne(() => ElectionEntity, (election) => election.lists, { nullable: false })
+	@ManyToOne(() => ElectionEntity, (election) => election.lists, {
+		nullable: false,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	election!: ElectionEntity;
 
-	@OneToMany(() => CandidateEntity, (candidate) => candidate.list)
+	@OneToMany(() => CandidateEntity, (candidate) => candidate.list, {
+		cascade: ['insert', 'update', 'remove'],
+	})
 	candidates!: CandidateEntity[];
 }

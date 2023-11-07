@@ -32,7 +32,7 @@ export class AuthService extends ConfigServer {
 	}
 
 	sign(payload: jwt.JwtPayload, secret: any) {
-		return this.jwtInstance.sign(payload, secret);
+		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
 	}
 
 	async generateJWT(user: UserEntity): Promise<{ accessToken: string; user: UserEntity }> {
