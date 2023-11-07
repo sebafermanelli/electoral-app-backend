@@ -4,7 +4,6 @@ import { ElectionDTO } from '../dtos/election.dto';
 import { ElectionEntity } from '../entities/election.entity';
 import { CandidateService } from '../../candidate/services/candidate.service';
 import { CandidateDTO } from '../../candidate/dtos/candidate.dto';
-import { DateTime, Settings } from 'luxon';
 
 export class ElectionService extends SharedService<ElectionEntity> {
 	constructor(private readonly candidateService: CandidateService = new CandidateService()) {
@@ -141,7 +140,7 @@ export class ElectionService extends SharedService<ElectionEntity> {
 		const updatedElection: ElectionDTO = {
 			name: election.name,
 			startDate: election.startDate,
-			endDate: DateTime.now().toJSDate(),
+			endDate: new Date(),
 		};
 		return (await this.execRepository).update(election.id, updatedElection);
 	}
