@@ -35,7 +35,6 @@ o sino el siguiente comando para utilizar `.production.env`:
 npm run start:prod
 ```
 
-
 ### Modo de Produccion con Docker
 Ejecuta el siguiente comando para iniciar la aplicación en modo de produccion con Docker:
 ```bash
