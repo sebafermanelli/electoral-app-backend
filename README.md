@@ -35,7 +35,6 @@ o sino el siguiente comando para utilizar `.production.env`:
 npm run start:prod
 ```
 
-
 ### Modo de Produccion con Docker
 Ejecuta el siguiente comando para iniciar la aplicación en modo de produccion con Docker:
 ```bash
@@ -47,4 +46,4 @@ docker run -it -p 8000:8000 electoral-app-backend
 ```
 
 ## Reportar Problemas
-Si encuentras algún problema o tienes alguna sugerencia, por favor [crea un issue](https://github.com/sebafermanelli/vote-app-backend/issues).
+Si encuentras algún problema o tienes alguna sugerencia, por favor [crea un issue](https://github.com/sebafermanelli/electoral-app-backend/issues).
