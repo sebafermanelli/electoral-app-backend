@@ -11,10 +11,7 @@ export class ElectionEntity extends SharedEntity {
 	name!: string;
 
 	@Column()
-	startDate!: Date;
-
-	@Column()
-	endDate!: Date;
+	finalizated!: boolean;
 
 	@OneToMany(() => VoteEntity, (vote) => vote.election)
 	votes!: VoteEntity[];

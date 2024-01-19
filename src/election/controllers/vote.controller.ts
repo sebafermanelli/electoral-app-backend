@@ -63,11 +63,8 @@ export class VoteController {
 			if (!listExist) {
 				return this.httpResponse.NotFound(res, 'La lista no existe');
 			}
-			if (electionExist.startDate > new Date()) {
-				return this.httpResponse.Error(res, 'La votacion todavia no empezo');
-			}
-			if (electionExist.endDate < new Date()) {
-				return this.httpResponse.Error(res, 'La votacion ya finalizo');
+			if (electionExist.finalizated) {
+				return this.httpResponse.Error(res, 'La votacion esta finalizada');
 			}
 			if (listExist.election.id != electionExist.id) {
 				return this.httpResponse.NotFound(res, 'La lista no existe en esa eleccion');

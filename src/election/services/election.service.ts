@@ -139,8 +139,7 @@ export class ElectionService extends SharedService<ElectionEntity> {
 		});
 		const updatedElection: ElectionDTO = {
 			name: election.name,
-			startDate: election.startDate,
-			endDate: new Date(),
+			finalizated: true,
 		};
 		return (await this.execRepository).update(election.id, updatedElection);
 	}

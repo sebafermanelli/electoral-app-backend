@@ -9,11 +9,10 @@ export class ElectionMiddleware extends SharedMiddleware {
 	}
 
 	validateElection(req: Request, res: Response, next: NextFunction) {
-		const { name, startDate, endDate } = req.body;
+		const { name, finalizated } = req.body;
 		const valid = new ElectionDTO();
 		valid.name = name;
-		valid.startDate = startDate;
-		valid.endDate = endDate;
+		valid.finalizated = finalizated;
 		validate(valid).then((error) => {
 			if (error.length > 0) {
 				return this.httpResponse.Error(res, error);

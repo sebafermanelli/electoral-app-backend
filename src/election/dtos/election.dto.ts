@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { SharedDTO } from '../../shared/dtos/shared.dto';
 
 export class ElectionDTO extends SharedDTO {
@@ -6,11 +6,7 @@ export class ElectionDTO extends SharedDTO {
 	@IsNotEmpty()
 	name!: string;
 
-	@IsDateString()
-	@IsNotEmpty()
-	startDate!: Date;
-
-	@IsDateString()
-	@IsNotEmpty()
-	endDate!: Date;
+	@IsBoolean()
+	@IsOptional()
+	finalizated!: boolean;
 }
