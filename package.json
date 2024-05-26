@@ -6,7 +6,6 @@
 	"scripts": {
 		"dev": "ts-node-dev src/server.ts",
 		"start": "tsc && node dist/server.js",
-		"start:prod": "SET NODE_ENV=production && npm start",
 		"typeorm": "typeorm-ts-node-commonjs -d ./src/config/data.source.ts",
 		"m:gen": "npm run typeorm migration:generate",
 		"m:run": "npm run typeorm migration:run"
