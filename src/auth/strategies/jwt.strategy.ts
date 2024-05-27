@@ -1,30 +1,30 @@
-import { Strategy as JwtStrategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
-import { PayloadToken } from '../interfaces/auth.interface';
-import { AuthService } from '../services/auth.service';
-import { PassportUse } from '../utils/passport.use';
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import { PayloadToken } from "../interfaces/auth.interface";
+import { AuthService } from "../services/auth.service";
+import { PassportUse } from "../utils/passport.use";
 
 export class JwtPassportStrategy extends AuthService {
-	constructor() {
-		super();
-	}
+    constructor() {
+        super();
+    }
 
-	async validate(payload: PayloadToken, done: any) {
-		return done(null, payload);
-	}
+    async validate(payload: PayloadToken, done: any) {
+        return done(null, payload);
+    }
 
-	get use() {
-		return PassportUse<
-			JwtStrategy,
-			any,
-			(payload: PayloadToken, done: any) => Promise<PayloadToken>
-		>(
-			'jwt',
-			JwtStrategy,
-			{
-				jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-				secretOrKey: this.getEnvironment('JWT_SECRET'),
-			},
-			this.validate
-		);
-	}
+    get use() {
+        return PassportUse<
+            JwtStrategy,
+            any,
+            (payload: PayloadToken, done: any) => Promise<PayloadToken>
+        >(
+            "jwt",
+            JwtStrategy,
+            {
+                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+                secretOrKey: this.getEnvironment("JWT_SECRET"),
+            },
+            this.validate
+        );
+    }
 }
